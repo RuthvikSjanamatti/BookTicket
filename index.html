@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieFlex - Your Ultimate Movie Booking Destination</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link to custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header Section -->
+    <header class="bg-gray-950 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-red-500">MovieFlex</h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="#" class="text-gray-300 hover:text-red-500 transition duration-300">Movies</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-red-500 transition duration-300">Theaters</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-red-500 transition duration-300">My Bookings</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-red-500 transition duration-300">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="container mx-auto p-6 flex-grow">
+        <h2 class="text-4xl font-extrabold text-white mb-8 text-center">Now Showing at <span id="theaterName" class="text-red-400">PVR Cinemas, Bengaluru</span></h2>
+
+        <!-- Movie Listings Grid -->
+        <div id="movie-listings" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <!-- Movie cards will be dynamically loaded here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Booking/Cancellation Modal -->
+    <div id="booking-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl p-6 relative transform transition-all scale-95 opacity-0 duration-300" id="modal-content-container">
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold" id="close-modal">&times;</button>
+            <h3 id="modal-title" class="text-3xl font-bold text-white mb-6 text-center">Book Tickets for Movie Title</h3>
+
+            <!-- Movie Details in Modal -->
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 mb-6">
+                <img id="modal-movie-poster" src="https://placehold.co/120x180/4A5568/FFFFFF?text=Poster" alt="Movie Poster" class="rounded-lg shadow-md w-24 h-36 md:w-32 md:h-48 object-cover">
+                <div class="text-center md:text-left">
+                    <p class="text-gray-300 text-lg mb-1"><span class="font-semibold">Genre:</span> <span id="modal-movie-genre">Action</span></p>
+                    <p class="text-gray-300 text-lg mb-1"><span class="font-semibold">Duration:</span> <span id="modal-movie-duration">150 mins</span></p>
+                    <p class="text-gray-300 text-lg"><span class="font-semibold">Rating:</span> <span id="modal-movie-rating">8.5/10</span></p>
+                </div>
+            </div>
+
+            <!-- Showtimes Selection -->
+            <div class="mb-6">
+                <label for="showtime-select" class="block text-gray-200 text-xl font-semibold mb-3">Select Showtime:</label>
+                <select id="showtime-select" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-200 cursor-pointer">
+                    <!-- Showtimes will be dynamically loaded here -->
+                </select>
+            </div>
+
+            <!-- Seat Selection Area -->
+            <div id="seat-selection-area" class="mb-6 hidden">
+                <p class="text-gray-200 text-xl font-semibold mb-3">Select Seats:</p>
+                <div id="seats-grid" class="grid grid-cols-10 gap-2 justify-center p-4 bg-gray-700 rounded-lg overflow-auto">
+                    <!-- Seats will be dynamically loaded here -->
+                </div>
+                <div class="flex justify-center mt-4">
+                    <div class="flex items-center space-x-4">
+                        <span class="w-6 h-6 rounded-md bg-green-500"></span><span class="text-gray-300">Available</span>
+                        <span class="w-6 h-6 rounded-md bg-red-600"></span><span class="text-gray-300">Booked</span>
+                        <span class="w-6 h-6 rounded-md bg-blue-500"></span><span class="text-gray-300">Selected</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Number of Tickets and Total Price -->
+            <div id="ticket-details-area" class="mb-6 hidden">
+                <label for="num-tickets" class="block text-gray-200 text-xl font-semibold mb-3">Number of Tickets:</label>
+                <input type="number" id="num-tickets" min="1" max="10" value="1" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-200">
+                <p class="text-gray-200 text-xl font-semibold mt-4">Total Price: <span id="total-price" class="text-red-400">₹0.00</span></p>
+            </div>
+
+
+            <!-- Booking/Cancellation Buttons -->
+            <div id="action-buttons" class="flex justify-end space-x-4">
+                <button id="book-tickets-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50">
+                    Book Tickets
+                </button>
+                <button id="cancel-tickets-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-opacity-50 hidden">
+                    Cancel Tickets
+                </button>
+            </div>
+
+            <!-- Confirmation Message -->
+            <div id="confirmation-message" class="mt-6 p-4 bg-green-700 text-white rounded-lg hidden">
+                <p class="font-semibold text-lg">Booking Confirmed!</p>
+                <p>Your tickets have been successfully booked. You will receive a confirmation email shortly.</p>
+            </div>
+            <!-- Error Message -->
+            <div id="error-message" class="mt-6 p-4 bg-red-700 text-white rounded-lg hidden">
+                <p class="font-semibold text-lg">Error!</p>
+                <p id="error-text">Something went wrong. Please try again.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-950 p-4 mt-8 text-center text-gray-400">
+        <div class="container mx-auto">
+            <p>&copy; 2025 MovieFlex. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Link to custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
